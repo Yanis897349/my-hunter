@@ -5,9 +5,13 @@
 ** Project description
 */
 
-int main(int ac, char **av)
+#include "Game/game.h"
+#include "include/my_std.h"
+#include <stdlib.h>
+
+int main(void)
 {
-    (void)ac;
-    (void)av;
-    return 0;
+    if (run_game() == EXIT_FAILURE)
+        return EXIT_ERROR;
+    return EXIT_SUCCESS;
 }
