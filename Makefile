@@ -5,25 +5,9 @@
 ## Build my_ls
 ##
 
-SRC = ./src/Core/options.c \
-	./src/Core/files.c \
-	./src/Core/directory.c \
-	./src/Helpers/args.c \
-	./src/Helpers/sort.c \
-	./src/Helpers/path.c \
-	./src/Helpers/memory.c \
-	./src/Display/display.c \
-	./src/Display/display_error.c \
-	./src/Display/normal_listing.c \
-	./src/Display/long_listing.c \
-	./src/Display/symbolic.c
-SRC_TEST = ./tests/test_my_ls.c \
-	./tests/test_options.c \
-	./tests/test_args.c \
-	./tests/test_files.c \
-	./tests/test_display.c \
-	./tests/test_sort.c
-MAIN_SRC = ./src/my_ls.c
+SRC = ./src/Window/window.c
+SRC_TEST = ./tests/test.c
+MAIN_SRC = ./src/main.c
 
 VALGRINDFLAGS = -s --leak-check=full --error-exitcode=1
 VALGRINDEXECFLAGS =
