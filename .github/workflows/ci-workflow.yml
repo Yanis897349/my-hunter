@@ -38,7 +38,7 @@ jobs:
     needs: [check_coding_style]
     runs-on: ubuntu-latest
     container:
-      image: yanis897349/lw-epitest-docker
+      image: epitechcontent/epitest-docker:latest
 
     steps:
       - name: Checkout repository
