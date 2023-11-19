@@ -9,8 +9,8 @@
 
 void event_handler(game_t *game)
 {
-    sfEvent event = game->game_screen->game_event;
+    sfEvent event = game->game_event;
 
     if (event.type == sfEvtClosed)
-        sfRenderWindow_close(game->game_screen->window);
+        sfRenderWindow_close(game->screen->window);
 }
