@@ -6,31 +6,28 @@
 */
 
 #include "Game/game.h"
+#include "Screen/screen.h"
 #include "Events/event_handler.h"
 #include <SFML/Window/Window.h>
 #include <stdlib.h>
 
-static int create_window(game_screen_t *game_screen)
+static int run_game_loop(game_t *game)
 {
-    game_screen->window = sfRenderWindow_create(
-        game_screen->screen_mode, WINDOW_NAME, sfResize | sfClose, NULL);
-    if (game_screen->window == NULL)
-        return EXIT_FAILURE;
+    while (sfRenderWindow_isOpen(game->screen->window)) {
+        while (sfRenderWindow_pollEvent(game->screen->window,
+            &game->game_event))
+            event_handler(game);
+        sfRenderWindow_clear(game->screen->window, sfBlack);
+        sfRenderWindow_display(game->screen->window);
+    }
     return EXIT_SUCCESS;
 }
 
-static game_screen_t *create_game_screen(int screen_width, int screen_height)
+static void destroy_game(game_t *game)
 {
-    game_screen_t *game_screen = malloc(sizeof(game_screen_t));
-
-    if (game_screen == NULL)
-        return NULL;
-    game_screen->screen_mode.width = screen_width;
-    game_screen->screen_mode.height = screen_height;
-    game_screen->screen_mode.bitsPerPixel = SCREEN_PIXELS;
-    if (create_window(game_screen) == EXIT_FAILURE)
-        return NULL;
-    return game_screen;
+    sfRenderWindow_destroy(game->screen->window);
+    free(game->screen);
+    free(game);
 }
 
 int run_game(void)
@@ -39,18 +36,12 @@ int run_game(void)
 
     if (game == NULL)
         return EXIT_FAILURE;
-    game->game_screen = create_game_screen(DEFAULT_SCREEN_WIDTH,
-        DEFAULT_SCREEN_HEIGHT);
-    if (game->game_screen == NULL)
+    game->screen = create_game_screen(DEFAULT_WINDOW_WIDTH,
+        DEFAULT_WINDOW_HEIGHT);
+    if (game->screen == NULL)
         return EXIT_FAILURE;
-    while (sfRenderWindow_isOpen(game->game_screen->window)) {
-        while (sfRenderWindow_pollEvent(game->game_screen->window,
-            &game->game_screen->game_event))
-            event_handler(game);
-        sfRenderWindow_clear(game->game_screen->window, sfBlack);
-        sfRenderWindow_display(game->game_screen->window);
-    }
-    sfRenderWindow_destroy(game->game_screen->window);
-    free(game->game_screen);
+    if (run_game_loop(game) == EXIT_FAILURE)
+        return EXIT_FAILURE;
+    destroy_game(game);
     return EXIT_SUCCESS;
 }

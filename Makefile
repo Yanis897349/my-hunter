@@ -13,7 +13,11 @@ RM = rm -f
 
 MAIN_SRC = ./src/main.c
 SRC = ./src/Game/game.c \
-	./src/Game/Events/event_handler.c
+	./src/Game/Events/event_handler.c \
+	./src/Game/entity.c \
+	./src/Game/player.c \
+	./src/Game/world.c \
+	./src/Screen/screen.c
 SRC_TEST = ./tests/test.c
 OBJS = $(MAIN_SRC:.c=.o) $(SRC:.c=.o)
 TEST_OBJS = $(SRC:.c=.o) $(SRC_TEST:.c=.o)
