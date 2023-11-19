@@ -18,6 +18,8 @@ static int run_game_loop(game_t *game)
             &game->game_event))
             event_handler(game);
         sfRenderWindow_clear(game->screen->window, sfBlack);
+        sfRenderWindow_drawSprite(game->screen->window,
+            game->world->background_sprite, NULL);
         sfRenderWindow_display(game->screen->window);
     }
     return EXIT_SUCCESS;
@@ -26,6 +28,8 @@ static int run_game_loop(game_t *game)
 static void destroy_game(game_t *game)
 {
     sfRenderWindow_destroy(game->screen->window);
+    sfSprite_destroy(game->world->background_sprite);
+    sfTexture_destroy(game->world->background_texture);
     free(game->screen);
     free(game);
 }
@@ -39,6 +43,9 @@ int run_game(void)
     game->screen = create_game_screen(DEFAULT_WINDOW_WIDTH,
         DEFAULT_WINDOW_HEIGHT);
     if (game->screen == NULL)
+        return EXIT_FAILURE;
+    game->world = create_world();
+    if (game->world == NULL)
         return EXIT_FAILURE;
     if (run_game_loop(game) == EXIT_FAILURE)
         return EXIT_FAILURE;
