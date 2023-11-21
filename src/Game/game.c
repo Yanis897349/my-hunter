@@ -44,7 +44,7 @@ int run_game(void)
         DEFAULT_WINDOW_HEIGHT);
     if (game->screen == NULL)
         return EXIT_FAILURE;
-    game->world = create_world();
+    game->world = create_world(game->screen->window);
     if (game->world == NULL)
         return EXIT_FAILURE;
     if (run_game_loop(game) == EXIT_FAILURE)
