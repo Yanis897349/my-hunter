@@ -15,9 +15,9 @@
 #define DEFAULT_ENTITY_SPRITES_WIDTH 31
 #define DEFAULT_ENTITY_TEXTURE_PATH "src/assets/entity/pokemon_01.png"
 #define DEFAULT_ENTITY_HIT_SOUND_PATH "src/assets/entity/hit.ogg"
-#define ANIMATION_SPEED 0.01
-#define MOVE_SPEED 0.001
-#define MOVE_OFFSET 5
+#define ANIMATION_SPEED 0.03
+#define MOVE_SPEED 0.003
+#define MOVE_OFFSET 8
 #define MS_TO_SEC 1000000.0
 #define SCALE_FACTOR 4
 #define MAX_SCALE_FACTOR 0.8

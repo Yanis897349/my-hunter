@@ -33,14 +33,19 @@ static int run_game_loop(game_t *game)
     entity_t *entity = create_entity(DEFAULT_ENTITY_TEXTURE_PATH,
         game->screen->window);
 
+    game->game_clock = sfClock_create();
     add_entity_to_world(game->world, entity);
     while (sfRenderWindow_isOpen(game->screen->window)) {
         while (sfRenderWindow_pollEvent(game->screen->window,
             &game->game_event))
             event_handler(game);
-        sfRenderWindow_clear(game->screen->window, sfBlack);
-        render_world(game);
-        sfRenderWindow_display(game->screen->window);
+        if (sfClock_getElapsedTime(game->game_clock).microseconds >
+            MS_TO_SEC / CAPPED_WINDOW_FPS) {
+            sfClock_restart(game->game_clock);
+            sfRenderWindow_clear(game->screen->window, sfBlack);
+            render_world(game);
+            sfRenderWindow_display(game->screen->window);
+        }
     }
     return EXIT_SUCCESS;
 }
