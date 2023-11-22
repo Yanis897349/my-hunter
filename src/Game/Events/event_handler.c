@@ -8,6 +8,7 @@
 #include "Game/entity.h"
 #include "Game/game.h"
 #include "Screen/screen.h"
+#include <SFML/Audio/Sound.h>
 #include <SFML/Graphics/Rect.h>
 #include <SFML/Window/Event.h>
 #include <SFML/Window/Mouse.h>
@@ -26,7 +27,9 @@ static void handle_mouse_click(sfMouseButtonEvent event, game_t *game)
             event.x, event.y)) {
             new_position = (sfVector2f){0, rand() % (window_height -
                     game->world->entities[i]->rect.height)};
-            entity_set_position(game->world->entities[i], new_position);
+            entity_set_position(game->world->entities[i], new_position,
+                game->screen->window);
+            sfSound_play(game->world->entities[i]->hit_sound);
         }
     }
 }
