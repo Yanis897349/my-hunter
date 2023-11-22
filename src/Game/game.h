@@ -18,6 +18,7 @@ typedef struct game_s {
     player_t *player;
     world_t *world;
     sfEvent game_event;
+    sfClock *game_clock;
 } game_t;
 
 int run_game(void);
