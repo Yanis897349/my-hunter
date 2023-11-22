@@ -9,6 +9,7 @@
 #include "Screen/screen.h"
 #include "Game/world.h"
 #include "Game/player.h"
+#include <SFML/Audio/Types.h>
 #include <SFML/Graphics.h>
 #include <SFML/Audio.h>
 
