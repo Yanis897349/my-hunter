@@ -19,4 +19,5 @@ typedef struct world_s {
 
 int world_set_background(world_t *world, char *texture_path,
     sfRenderWindow *window);
+int add_entity_to_world(world_t *world, entity_t *entity);
 world_t *create_world(sfRenderWindow *window);

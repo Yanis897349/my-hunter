@@ -63,6 +63,8 @@ world_t *create_world(sfRenderWindow *window)
         return NULL;
     world->background_sprite = NULL;
     world->background_texture = NULL;
+    world->entities = NULL;
+    world->entities_count = 0;
     if (world_set_background(
         world, WORLD_BACKGROUND_PATH, window) == EXIT_FAILURE)
         return NULL;
