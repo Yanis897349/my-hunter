@@ -6,7 +6,7 @@
 ##
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I. -I./src/ -L . -lmy -MMD -MP
+CFLAGS = -Wall -Wextra -I. -I./src/ -L . -lmy -MMD -MP
 CSFMLFLAGS = -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio
 LDFLAGS = -L . -lmy $(CSFMLFLAGS)
 RM = rm -f

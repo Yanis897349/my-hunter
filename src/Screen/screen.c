@@ -14,6 +14,7 @@ static int create_window(screen_t *screen)
         screen->window_mode, WINDOW_NAME, sfResize | sfClose, NULL);
     if (screen->window == NULL)
         return EXIT_FAILURE;
+    sfRenderWindow_setFramerateLimit(screen->window, DEFAULT_WINDOW_FPS);
     return EXIT_SUCCESS;
 }
 
