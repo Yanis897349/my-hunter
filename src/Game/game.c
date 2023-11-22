@@ -10,6 +10,7 @@
 #include "Game/world.h"
 #include "Screen/screen.h"
 #include "Events/event_handler.h"
+#include <SFML/Audio/Music.h>
 #include <SFML/Window/Window.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,7 +30,8 @@ static int render_world(game_t *game)
 
 static int run_game_loop(game_t *game)
 {
-    entity_t *entity = create_entity(DEFAULT_ENTITY_TEXTURE_PATH);
+    entity_t *entity = create_entity(DEFAULT_ENTITY_TEXTURE_PATH,
+        game->screen->window);
 
     add_entity_to_world(game->world, entity);
     while (sfRenderWindow_isOpen(game->screen->window)) {
@@ -50,6 +52,7 @@ static void destroy_game(game_t *game)
     sfTexture_destroy(game->world->background_texture);
     for (uint i = 0; i < game->world->entities_count; i++)
         destroy_entity(game->world->entities[i]);
+    sfMusic_destroy(game->world->music);
     free(game->screen);
     free(game);
 }
