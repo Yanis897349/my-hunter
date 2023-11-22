@@ -8,8 +8,10 @@
 #include "Game/world.h"
 #include "Game/game.h"
 #include "include/my_std.h"
+#include <SFML/Audio/Music.h>
 #include <SFML/Graphics.h>
 #include <SFML/Graphics/Sprite.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 static void scale_background(world_t *world, sfRenderWindow *window)
@@ -41,6 +43,19 @@ int world_set_background(world_t *world, char *texture_path,
     return EXIT_SUCCESS;
 }
 
+int world_set_music(world_t *world, char *music_path)
+{
+    if (world->music != NULL)
+        sfMusic_destroy(world->music);
+    world->music = sfMusic_createFromFile(music_path);
+    if (world->music == NULL)
+        return EXIT_FAILURE;
+    sfMusic_setLoop(world->music, sfTrue);
+    sfMusic_setVolume(world->music, 20);
+    sfMusic_play(world->music);
+    return EXIT_SUCCESS;
+}
+
 int add_entity_to_world(world_t *world, entity_t *entity)
 {
     int old_entities_size = world->entities_count * sizeof(entity_t);
@@ -63,10 +78,13 @@ world_t *create_world(sfRenderWindow *window)
         return NULL;
     world->background_sprite = NULL;
     world->background_texture = NULL;
+    world->music = NULL;
     world->entities = NULL;
     world->entities_count = 0;
     if (world_set_background(
         world, WORLD_BACKGROUND_PATH, window) == EXIT_FAILURE)
+        return NULL;
+    if (world_set_music(world, WORLD_MUSIC_PATH) == EXIT_FAILURE)
         return NULL;
     return world;
 }
