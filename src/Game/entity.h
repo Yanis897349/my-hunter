@@ -6,13 +6,15 @@
 */
 
 #pragma once
+#include <SFML/Audio/Types.h>
 #include <SFML/Graphics.h>
 #include <SFML/Graphics/Rect.h>
 #include <SFML/System/Time.h>
-#define DEFAULT_ENTITY_X_POSITION 0
-#define DEFAULT_ENTITY_Y_POSITION 0
+#define DEFAULT_ENTITY_X_POS 0
+#define DEFAULT_ENTITY_Y_POS 0
 #define DEFAULT_ENTITY_SPRITES_WIDTH 31
 #define DEFAULT_ENTITY_TEXTURE_PATH "src/assets/entity/pokemon_01.png"
+#define DEFAULT_ENTITY_HIT_SOUND_PATH "src/assets/entity/hit.ogg"
 #define ANIMATION_SPEED 0.01
 #define MOVE_SPEED 0.001
 #define MOVE_OFFSET 5
@@ -25,12 +27,15 @@ typedef struct entity_s {
     sfClock *move_clock;
     sfSprite *sprite;
     sfTexture *texture;
+    sfSoundBuffer *hit_sound_buffer;
+    sfSound *hit_sound;
     sfVector2f position;
     sfIntRect rect;
     sfFloatRect hitbox;
 } entity_t;
 
-void entity_set_position(entity_t *entity, sfVector2f position);
+void entity_set_position(entity_t *entity, sfVector2f position,
+    sfRenderWindow *window);
 void update_entity(entity_t *entity, sfRenderWindow *window);
 void destroy_entity(entity_t *entity);
-entity_t *create_entity(char *texture_path);
+entity_t *create_entity(char *texture_path, sfRenderWindow *window);
