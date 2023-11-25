@@ -7,6 +7,7 @@
 
 #include "Game/game.h"
 #include "Game/entity.h"
+#include "Game/player.h"
 #include "Game/world.h"
 #include "Screen/screen.h"
 #include "Events/event_handler.h"
@@ -30,6 +31,8 @@ static int render_world(game_t *game)
         sfRenderWindow_drawSprite(game->screen->window,
             game->world->entities[i]->sprite, NULL);
     }
+    sfRenderWindow_drawSprite(game->screen->window,
+        game->player->crosshair_sprite, NULL);
     return EXIT_SUCCESS;
 }
 
@@ -70,6 +73,7 @@ static void destroy_game(game_t *game)
     sfText_destroy(game->world->score_text);
     sfFont_destroy(game->world->score_font);
     sfClock_destroy(game->game_clock);
+    destroy_player(game->player);
     free(game->world->entities);
     free(game->screen);
     free(game);
@@ -88,7 +92,7 @@ int run_game(void)
     game->world = create_world(game->screen->window);
     if (game->world == NULL)
         return EXIT_FAILURE;
-    game->player = create_player();
+    game->player = create_player(game->screen->window);
     if (game->player == NULL)
         return EXIT_FAILURE;
     if (run_game_loop(game) == EXIT_FAILURE)
