@@ -7,6 +7,7 @@
 
 #include "Game/entity.h"
 #include "Game/game.h"
+#include "Game/player.h"
 #include "Screen/screen.h"
 #include <SFML/Audio/Sound.h>
 #include <SFML/Graphics/Rect.h>
@@ -38,7 +39,9 @@ static void handle_mouse_click(sfMouseButtonEvent event, game_t *game)
 
 static void handle_mouse_moved(sfMouseMoveEvent event, game_t *game)
 {
-    return;
+    if (game->player->crosshair_sprite == NULL)
+        return;
+    set_crosshair_position(game->player, game->screen->window);
 }
 
 static void handle_resize(sfSizeEvent event, sfRenderWindow *window)
