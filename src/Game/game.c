@@ -11,6 +11,8 @@
 #include "Screen/screen.h"
 #include "Events/event_handler.h"
 #include <SFML/Audio/Music.h>
+#include <SFML/Graphics/Font.h>
+#include <SFML/System/Clock.h>
 #include <SFML/Window/Window.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +22,8 @@ static int render_world(game_t *game)
 {
     sfRenderWindow_drawSprite(game->screen->window,
         game->world->background_sprite, NULL);
+    sfRenderWindow_drawText(game->screen->window,
+        game->world->score_text, NULL);
     for (uint i = 0; i < game->world->entities_count; i++) {
         update_entity(game->world->entities[i], game->screen->window);
         sfRenderWindow_drawSprite(game->screen->window,
@@ -58,6 +62,10 @@ static void destroy_game(game_t *game)
     for (uint i = 0; i < game->world->entities_count; i++)
         destroy_entity(game->world->entities[i]);
     sfMusic_destroy(game->world->music);
+    sfText_destroy(game->world->score_text);
+    sfFont_destroy(game->world->score_font);
+    sfClock_destroy(game->game_clock);
+    free(game->world->entities);
     free(game->screen);
     free(game);
 }
@@ -74,6 +82,9 @@ int run_game(void)
         return EXIT_FAILURE;
     game->world = create_world(game->screen->window);
     if (game->world == NULL)
+        return EXIT_FAILURE;
+    game->player = create_player();
+    if (game->player == NULL)
         return EXIT_FAILURE;
     if (run_game_loop(game) == EXIT_FAILURE)
         return EXIT_FAILURE;

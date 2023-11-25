@@ -8,6 +8,7 @@
 
 #ifndef MY_STRINGS_H_
     #define MY_STRINGS_H_
+    #define BASE_10 "0123456789"
 char *my_putnbr_base(int nbr, const char *base, char *str);
 char *my_putnbr_base_unsigned(unsigned int n, const char *base);
 char *my_putnbr_base_int64(long int n, const char *base);
