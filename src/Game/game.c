@@ -10,6 +10,7 @@
 #include "Game/world.h"
 #include "Screen/screen.h"
 #include "Events/event_handler.h"
+#include "SaveManager/save_manager.h"
 #include <SFML/Audio/Music.h>
 #include <SFML/Graphics/Font.h>
 #include <SFML/System/Clock.h>
@@ -56,6 +57,10 @@ static int run_game_loop(game_t *game)
 
 static void destroy_game(game_t *game)
 {
+    int highest_score = get_highest_score();
+
+    if (game->player->score > highest_score)
+        save_highest_score(game->player->score);
     sfRenderWindow_destroy(game->screen->window);
     sfSprite_destroy(game->world->background_sprite);
     sfTexture_destroy(game->world->background_texture);
