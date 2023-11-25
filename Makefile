@@ -17,7 +17,8 @@ SRC = ./src/Game/game.c \
 	./src/Game/entity.c \
 	./src/Game/player.c \
 	./src/Game/world.c \
-	./src/Screen/screen.c
+	./src/Screen/screen.c \
+	./src/SaveManager/save_manager.c
 SRC_TEST = ./tests/test.c
 OBJS = $(MAIN_SRC:.c=.o) $(SRC:.c=.o)
 TEST_OBJS = $(SRC:.c=.o) $(SRC_TEST:.c=.o)
