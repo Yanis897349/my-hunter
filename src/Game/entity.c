@@ -44,6 +44,9 @@ static int set_entity_sprite(entity_t *entity, sfRenderWindow *window,
     char *texture_path)
 {
     sfVector2u texture_size;
+    int window_height = sfRenderWindow_getSize(window).y;
+    sfVector2f entity_position =
+        {DEFAULT_ENTITY_X_POS, rand() % (window_height - entity->rect.height)};
 
     entity->texture = sfTexture_createFromFile(texture_path, NULL);
     if (entity->texture == NULL)
@@ -55,8 +58,7 @@ static int set_entity_sprite(entity_t *entity, sfRenderWindow *window,
     if (entity->sprite == NULL)
         return EXIT_FAILURE;
     sfSprite_setTexture(entity->sprite, entity->texture, sfTrue);
-    entity_set_position(entity,
-        (sfVector2f) {DEFAULT_ENTITY_X_POS, DEFAULT_ENTITY_Y_POS}, window);
+    entity_set_position(entity, entity_position, window);
     entity->hitbox = sfSprite_getGlobalBounds(entity->sprite);
     return EXIT_SUCCESS;
 }
