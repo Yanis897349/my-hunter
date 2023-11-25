@@ -30,6 +30,8 @@ static void handle_mouse_click(sfMouseButtonEvent event, game_t *game)
             entity_set_position(game->world->entities[i], new_position,
                 game->screen->window);
             sfSound_play(game->world->entities[i]->hit_sound);
+            player_add_score(game->player, 1);
+            world_set_score(game->world, game->player->score);
         }
     }
 }
