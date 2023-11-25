@@ -20,7 +20,6 @@ void player_add_score(player_t *player, int score)
 void set_crosshair_position(player_t *player, sfRenderWindow *window)
 {
     sfVector2i mouse_pos = sfMouse_getPositionRenderWindow(window);
-    sfVector2u window_size = sfRenderWindow_getSize(window);
     sfVector2u crosshair_size = sfTexture_getSize(player->crosshair_texture);
     sfVector2f scale_factor = {0.05 , 0.05};
 
@@ -62,5 +61,6 @@ player_t *create_player(sfRenderWindow *window)
     if (set_player_crosshair(player, PLAYER_CROSSHAIR_TEXTURE_PATH, window) ==
         EXIT_FAILURE)
         return NULL;
+    sfRenderWindow_setMouseCursorVisible(window, sfFalse);
     return player;
 }

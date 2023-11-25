@@ -25,21 +25,20 @@ static void scale_background(world_t *world, sfRenderWindow *window)
             (float)window_size.y / texture_size.y});
 }
 
-static int world_setup_score_text(world_t *world, sfRenderWindow *window)
+static int world_setup_score_text(world_t *world)
 {
-    sfVector2u window_size = sfRenderWindow_getSize(window);
-
     world->score_text = sfText_create();
     if (world->score_text == NULL)
-        return NULL;
+        return EXIT_FAILURE;
     world->score_font = sfFont_createFromFile(WORLD_SCORE_FONT_PATH);
     if (world->score_font == NULL)
-        return NULL;
+        return EXIT_FAILURE;
     sfText_setFont(world->score_text, world->score_font);
     sfText_setCharacterSize(world->score_text, WORLD_SCORE_TEXT_SIZE);
     sfText_setPosition(world->score_text, (sfVector2f) {0, 0});
     sfText_setColor(world->score_text, sfWhite);
     world_set_score(world, 0);
+    return EXIT_SUCCESS;
 }
 
 int world_set_background(world_t *world, char *texture_path,
@@ -109,7 +108,7 @@ world_t *create_world(sfRenderWindow *window)
     world->music = NULL;
     world->entities = NULL;
     world->entities_count = 0;
-    if (world_setup_score_text(world, window) == EXIT_FAILURE)
+    if (world_setup_score_text(world) == EXIT_FAILURE)
         return NULL;
     if (world_set_background(
         world, WORLD_BACKGROUND_PATH, window) == EXIT_FAILURE)

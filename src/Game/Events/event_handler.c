@@ -37,7 +37,7 @@ static void handle_mouse_click(sfMouseButtonEvent event, game_t *game)
     }
 }
 
-static void handle_mouse_moved(sfMouseMoveEvent event, game_t *game)
+static void handle_mouse_moved(game_t *game)
 {
     if (game->player->crosshair_sprite == NULL)
         return;
@@ -76,7 +76,7 @@ void event_handler(game_t *game)
         handle_mouse_click(event.mouseButton, game);
         break;
     case sfEvtMouseMoved:
-        handle_mouse_moved(event.mouseMove, game);
+        handle_mouse_moved(game);
         break;
     case sfEvtResized:
         handle_resize(event.size, game->screen->window);
