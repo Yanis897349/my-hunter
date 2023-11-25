@@ -8,6 +8,7 @@
 #include "Game/world.h"
 #include "Game/game.h"
 #include "include/my_std.h"
+#include "include/my_strings.h"
 #include <SFML/Audio/Music.h>
 #include <SFML/Graphics.h>
 #include <SFML/Graphics/Sprite.h>
@@ -22,6 +23,23 @@ static void scale_background(world_t *world, sfRenderWindow *window)
     sfSprite_setScale(world->background_sprite,
         (sfVector2f){(float)window_size.x / texture_size.x,
             (float)window_size.y / texture_size.y});
+}
+
+static int world_setup_score_text(world_t *world, sfRenderWindow *window)
+{
+    sfVector2u window_size = sfRenderWindow_getSize(window);
+
+    world->score_text = sfText_create();
+    if (world->score_text == NULL)
+        return NULL;
+    world->score_font = sfFont_createFromFile(WORLD_SCORE_FONT_PATH);
+    if (world->score_font == NULL)
+        return NULL;
+    sfText_setFont(world->score_text, world->score_font);
+    sfText_setCharacterSize(world->score_text, WORLD_SCORE_TEXT_SIZE);
+    sfText_setPosition(world->score_text, (sfVector2f) {0, 0});
+    sfText_setColor(world->score_text, sfWhite);
+    world_set_score(world, 0);
 }
 
 int world_set_background(world_t *world, char *texture_path,
@@ -51,9 +69,19 @@ int world_set_music(world_t *world, char *music_path)
     if (world->music == NULL)
         return EXIT_FAILURE;
     sfMusic_setLoop(world->music, sfTrue);
-    sfMusic_setVolume(world->music, 20);
+    sfMusic_setVolume(world->music, DEFAULT_MUSIC_VOLUME);
     sfMusic_play(world->music);
     return EXIT_SUCCESS;
+}
+
+void world_set_score(world_t *world, int score)
+{
+    char score_int[SCORE_INT_LEN];
+    char score_str[SCORE_STR_LEN] = SCORE_STR_PREFIX;
+
+    my_putnbr_base(score, BASE_10, score_int);
+    my_strcat(score_str, score_int);
+    sfText_setString(world->score_text, score_str);
 }
 
 int add_entity_to_world(world_t *world, entity_t *entity)
@@ -81,6 +109,8 @@ world_t *create_world(sfRenderWindow *window)
     world->music = NULL;
     world->entities = NULL;
     world->entities_count = 0;
+    if (world_setup_score_text(world, window) == EXIT_FAILURE)
+        return NULL;
     if (world_set_background(
         world, WORLD_BACKGROUND_PATH, window) == EXIT_FAILURE)
         return NULL;
