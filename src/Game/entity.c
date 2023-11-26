@@ -45,8 +45,7 @@ static int set_entity_sprite(entity_t *entity, sfRenderWindow *window,
 {
     sfVector2u texture_size;
     int window_height = sfRenderWindow_getSize(window).y;
-    sfVector2f entity_position =
-        {DEFAULT_ENTITY_X_POS, rand() % (window_height - entity->rect.height)};
+    sfVector2f entity_position = {0, 0};
 
     entity->texture = sfTexture_createFromFile(texture_path, NULL);
     if (entity->texture == NULL)
@@ -54,6 +53,8 @@ static int set_entity_sprite(entity_t *entity, sfRenderWindow *window,
     texture_size = sfTexture_getSize(entity->texture);
     entity->rect = (sfIntRect) {0, 0,
         texture_size.x / DEFAULT_ENTITY_SPRITES_WIDTH, texture_size.y};
+    entity_position = (sfVector2f)
+        {DEFAULT_ENTITY_X_POS, rand() % (window_height - entity->rect.height)};
     entity->sprite = sfSprite_create();
     if (entity->sprite == NULL)
         return EXIT_FAILURE;
@@ -127,6 +128,7 @@ entity_t *create_entity(char *texture_path, sfRenderWindow *window)
 
     if (entity == NULL)
         return NULL;
+    entity->rect = (sfIntRect) {0, 0, 0, 0};
     if (set_entity_clocks(entity) == EXIT_FAILURE)
         return NULL;
     if (set_entity_sprite(entity, window, texture_path) == EXIT_FAILURE)
