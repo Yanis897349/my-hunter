@@ -8,6 +8,7 @@
 #include "Game/entity.h"
 #include "Game/game.h"
 #include "Game/player.h"
+#include "Game/world.h"
 #include "Screen/screen.h"
 #include <SFML/Audio/Sound.h>
 #include <SFML/Graphics/Rect.h>
@@ -16,23 +17,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void handle_mouse_click(sfMouseButtonEvent event, game_t *game)
+static int is_hitbox_contains(sfFloatRect hitbox, int x, int y)
+{
+    return sfFloatRect_contains(&hitbox, x, y);
+}
+
+static void set_new_position(entity_t *entity, sfRenderWindow *window)
 {
     sfVector2f new_position = {0, 0};
-    int window_height = game->screen->window_mode.height;
+    int window_height = sfRenderWindow_getSize(window).y;
 
+    new_position = (sfVector2f){0, rand() % (window_height -
+        entity->rect.height)};
+    entity_set_position(entity, new_position, window);
+}
+
+static void handle_mouse_click(sfMouseButtonEvent event, game_t *game)
+{
     if (event.button != sfMouseLeft)
         return;
     for (uint i = 0; i < game->world->entities_count; i++) {
-        if (sfFloatRect_contains(&game->world->entities[i]->hitbox,
-            event.x, event.y)) {
-            new_position = (sfVector2f){0, rand() % (window_height -
-                    game->world->entities[i]->rect.height)};
-            entity_set_position(game->world->entities[i], new_position,
-                game->screen->window);
+        if (is_hitbox_contains(game->world->entities[i]->hitbox, event.x,
+            event.y)) {
+            set_new_position(game->world->entities[i], game->screen->window);
             sfSound_play(game->world->entities[i]->hit_sound);
             player_add_score(game->player, 1);
             world_set_score(game->world, game->player->score);
+            game->world->level->current_killed_entities++;
+            world_new_level(game->world->level, game->screen->window,
+                game->world);
         }
     }
 }

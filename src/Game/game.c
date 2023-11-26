@@ -38,11 +38,7 @@ static int render_world(game_t *game)
 
 static int run_game_loop(game_t *game)
 {
-    entity_t *entity = create_entity(DEFAULT_ENTITY_TEXTURE_PATH,
-        game->screen->window);
-
     game->game_clock = sfClock_create();
-    add_entity_to_world(game->world, entity);
     while (sfRenderWindow_isOpen(game->screen->window)) {
         while (sfRenderWindow_pollEvent(game->screen->window,
             &game->game_event))

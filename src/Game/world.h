@@ -7,6 +7,7 @@
 
 #pragma once
 #include "Game/entity.h"
+#include "Game/level.h"
 #include <SFML/Audio/Types.h>
 #include <SFML/Graphics/Types.h>
 #define WORLD_BACKGROUND_PATH "src/assets/world/background.jpg"
@@ -21,16 +22,16 @@
 typedef struct world_s {
     sfTexture *background_texture;
     sfSprite *background_sprite;
-    sfMusic *music;
-    entity_t **entities;
-    unsigned int entities_count;
     sfFont *score_font;
     sfText *score_text;
+    sfMusic *music;
+    level_t *level;
+    entity_t **entities;
+    unsigned int entities_count;
 } world_t;
 
-int world_set_background(world_t *world, char *texture_path,
-    sfRenderWindow *window);
 void world_set_score(world_t *world, int score);
 int world_set_music(world_t *world, char *music_path);
+void world_new_level(level_t *level, sfRenderWindow *window, world_t *world);
 int add_entity_to_world(world_t *world, entity_t *entity);
 world_t *create_world(sfRenderWindow *window);
