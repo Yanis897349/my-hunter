@@ -17,6 +17,7 @@ SRC = ./src/Game/game.c \
 	./src/Game/entity.c \
 	./src/Game/player.c \
 	./src/Game/world.c \
+	./src/Game/level.c \
 	./src/Screen/screen.c \
 	./src/SaveManager/save_manager.c
 SRC_TEST = ./tests/test.c

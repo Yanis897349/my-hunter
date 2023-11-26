@@ -6,12 +6,14 @@
 */
 
 #include "Game/world.h"
+#include "Game/entity.h"
 #include "Game/game.h"
 #include "include/my_std.h"
 #include "include/my_strings.h"
 #include <SFML/Audio/Music.h>
 #include <SFML/Graphics.h>
 #include <SFML/Graphics/Sprite.h>
+#include <SFML/Graphics/Types.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -41,7 +43,24 @@ static int world_setup_score_text(world_t *world)
     return EXIT_SUCCESS;
 }
 
-int world_set_background(world_t *world, char *texture_path,
+static int world_setup_level(world_t *world, sfRenderWindow *window)
+{
+    entity_t *entity = NULL;
+
+    world->level = create_level(1, 1, 1);
+    if (world->level == NULL)
+        return EXIT_FAILURE;
+    for (uint i = 0; i < world->level->entities_to_spawn; i++) {
+        entity = create_entity(DEFAULT_ENTITY_TEXTURE_PATH, window);
+        if (entity == NULL)
+            return EXIT_FAILURE;
+        if (add_entity_to_world(world, entity) == EXIT_FAILURE)
+            return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
+}
+
+static int world_set_background(world_t *world, char *texture_path,
     sfRenderWindow *window)
 {
     if (world->background_sprite != NULL)
@@ -58,6 +77,21 @@ int world_set_background(world_t *world, char *texture_path,
         world->background_texture, sfTrue);
     scale_background(world, window);
     return EXIT_SUCCESS;
+}
+
+void world_new_level(level_t *level, sfRenderWindow *window, world_t *world)
+{
+    entity_t *entity = NULL;
+
+    if (level->current_killed_entities >=
+        level->entities_to_kill) {
+        update_level(level, level->level + 1,
+        level->entities_to_spawn + 1,
+        level->entities_to_kill + 1);
+        level->current_killed_entities = 0;
+        entity = create_entity(DEFAULT_ENTITY_TEXTURE_PATH, window);
+        add_entity_to_world(world, entity);
+    }
 }
 
 int world_set_music(world_t *world, char *music_path)
@@ -114,6 +148,8 @@ world_t *create_world(sfRenderWindow *window)
         world, WORLD_BACKGROUND_PATH, window) == EXIT_FAILURE)
         return NULL;
     if (world_set_music(world, WORLD_MUSIC_PATH) == EXIT_FAILURE)
+        return NULL;
+    if (world_setup_level(world, window) == EXIT_FAILURE)
         return NULL;
     return world;
 }
