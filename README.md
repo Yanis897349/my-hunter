@@ -27,3 +27,6 @@ available user inputs.
 - ✔️ The program **could** display the score of the player.
 - ✔️ The program **could** store the highest score made.
 - ✔️ The program **could** display a small target under the mouse cursor.
+## 🚀 Bonus
+- ✔️ Ambient music.
+- ✔️ Impact sound.
